@@ -1,36 +1,112 @@
 API para consulta de cédulas SEP
 ===========
 
-API para consulta de cédulas profesionales de la SEP
-
-http://search.sep.gob.mx/solr/cedulasCore/select?fl=%2A%2Cscore&q=enrique+pena+nieto&start=0&rows=100&facet=true&indent=on&wt=json
-
+**URL**
+```bash
+GET https://cedulaprofesional.sep.gob.mx/cedula/buscaCedulaJson.action
 ```
+
+**Parametros**
+```json
 {
-  "responseHeader":{
-    "status":0,
-    "QTime":1,
-    "params":{
-      "facet":"true",
-      "indent":"on",
-      "wt":"json",
-      "rows":"100",
-      "fl":"*,score",
-      "start":"0",
-      "q":"enrique pena nieto"}},
-  "response":{"numFound":153546,"start":0,"maxScore":3.4999735,"docs":[
-      {
-        "nombre":"ENRIQUE",
-        "id":"1629426|C1",
-        "numCedula":"1629426",
-        "titulo":"LICENCIATURA EN DERECHO",
-        "genero":"1",
-        "institucion":"UNIVERSIDAD PANAMERICANA",
-        "materno":"NIETO",
-        "anioRegistro":1991,
-        "tipo":"C1",
-        "paterno":"PEÑA",
-        "timestamp":"2015-01-22T09:14:58.313Z",
-        "score":3.4999735},
-	...
+    "json": {
+        "maxResult": "",
+        "nombre": "",
+        "paterno": "",
+        "materno": "",
+        "idCedula": ""
+    }
+}
+```
+Propiedad|Tipo de datos|Descripcion
+---|---|---
+maxResult|string|Cantidad maxima de resultados retornados por el API
+nombre|string|Nombre para realizar la busqueda. Opcional
+paterno|string|Apellido paterno. Solo en caso de busqueda por nombre
+materno|string|Apellido materno. Solo en caso de busqueda por nombre
+idCedula|string|Numero de cedula profecional a buscar. Opcional
+
+**Headers**
+```json
+{
+    "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+}
+```
+| Nota: Si no se especifica el header el API no retorna datos
+
+## Ejemplos
+
+Busqueda por nombre
+```curl
+curl --location -g --request GET 'https://cedulaprofesional.sep.gob.mx/cedula/buscaCedulaJson.action?json={"maxResult":"1000","nombre":"ENRIQUE","paterno":"PEÑA","materno":"NIETO","idCedula":""}' \
+--header 'Content-Type: application/x-www-form-urlencoded; charset=utf-8'
+```
+Busqueda de cedula por su numero
+```curl
+curl --location -g --request GET 'https://cedulaprofesional.sep.gob.mx/cedula/buscaCedulaJson.action?json={"maxResult":"1000","nombre":"","paterno":"","materno":"","idCedula":"10390826"}' \
+--header 'Content-Type: application/x-www-form-urlencoded; charset=utf-8'
+```
+
+## Respuesta
+
+```json
+{
+    "items": [
+        {
+            "anioreg": 1991,
+            "carArea": null,
+            "carCons": null,
+            "carNivel": null,
+            "carSarea": null,
+            "curp": null,
+            "desins": "UNIVERSIDAD PANAMERICANA",
+            "foja": null,
+            "idCedula": "1629426",
+            "inscons": null,
+            "insedo": null,
+            "libro": null,
+            "materno": "NIETO",
+            "maternoM": null,
+            "nombre": "ENRIQUE",
+            "nombreM": null,
+            "numero": null,
+            "paterno": "PEÑA",
+            "paternoM": null,
+            "sexo": "1",
+            "tipo": "C1",
+            "titulo": "LICENCIATURA EN DERECHO"
+        },
+        {
+            "anioreg": 2017,
+            "carArea": null,
+            "carCons": null,
+            "carNivel": null,
+            "carSarea": null,
+            "curp": null,
+            "desins": "INSTITUTO TECNOLÓGICO Y DE ESTUDIOS SUPERIORES DE MONTERREY",
+            "foja": null,
+            "idCedula": "10390826",
+            "inscons": null,
+            "insedo": null,
+            "libro": null,
+            "materno": "NIETO",
+            "maternoM": null,
+            "nombre": "ENRIQUE",
+            "nombreM": null,
+            "numero": null,
+            "paterno": "PEÑA",
+            "paternoM": null,
+            "sexo": "1",
+            "tipo": "C1",
+            "titulo": "MAESTRÍA EN ADMINISTRACIÓN"
+        }
+    ],
+    "filename": null,
+    "idCedula": null,
+    "idProfesionista": null,
+    "sessionId": null,
+    "theStream": null,
+    "token": null,
+    "urlVideo": null
+}
 ```
